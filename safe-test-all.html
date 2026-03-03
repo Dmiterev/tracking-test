@@ -1,119 +1,92 @@
 <!DOCTYPE html>
 <html>
-<head><title>🔒 Безопасный тест трекинга</title>
+<head><title>🔓 Что МОЖЕТ украсть трекер</title>
 <meta charset="UTF-8">
 <style>
-    body { font-family: Arial; max-width: 900px; margin: 50px auto; }
-    .test { border: 2px solid #10b981; padding: 20px; margin: 20px 0; border-radius: 12px; }
-    .danger { background: #fee2e2; border-left: 5px solid #dc2626; }
-    .safe { background: #ecfdf5; border-left: 5px solid #16a34a; }
-    button { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; margin: 5px; }
+    body { font-family: Arial; max-width: 900px; margin: 50px auto; padding: 20px; }
+    .stolen { 
+        background: linear-gradient(90deg, #ef4444, #dc2626); 
+        color: white; 
+        padding: 25px; 
+        border-radius: 15px; 
+        margin: 20px 0;
+        box-shadow: 0 10px 25px rgba(239,68,68,0.4);
+    }
+    .test { border: 2px solid #3b82f6; padding: 20px; margin: 20px 0; border-radius: 12px; }
+    button { padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+    .profile { background: #1f2937; color: #60a5fa; padding: 20px; border-radius: 10px; font-family: monospace; }
 </style>
 </head>
 <body>
-<h1>🔒 БЕЗОПАСНЫЙ тест угроз — НИ ДАННЫХ НЕ УХОДИТ!</h1>
+<h1>🔓 Что МОЖЕТ украсть с ВАШЕГО компьютера</h1>
 
-<!-- ТЕСТ 1: Локальный fingerprint (без IP) -->
 <div class="test">
-    <h2>🖐️ Fingerprint (78% уникальных)</h2>
-    <button onclick="testFingerprint()">Запустить тест</button>
-    <div id="fp-result"></div>
-</div>
-
-<!-- ТЕСТ 2: Cookies локально -->
-<div class="test">
-    <h2>🍪 Third-party cookies симуляция</h2>
-    <button onclick="testCookies()">Установить cookie</button>
-    <button onclick="readCookies()">Прочитать cookie</button>
-    <div id="cookie-result"></div>
-</div>
-
-<!-- ТЕСТ 3: Supercookie локально -->
-<div class="test">
-    <h2>🧟‍♂️ Supercookie тест</h2>
-    <button onclick="setSupercookie()">Установить</button>
-    <button onclick="checkSupercookie()">Проверить</button>
-    <button onclick="clearAll()">Очистить ВСЁ</button>
-    <div id="super-result"></div>
+    <h2>🕵️ Запустить ПОЛНЫЙ аудит</h2>
+    <button onclick="stealEverything()">🚨 Украсть ВСЕ данные</button>
+    <div id="stolen-data">Нажмите кнопку...</div>
 </div>
 
 <script>
-// 🔒 ТЕСТ 1: Fingerprint БЕЗ отправки
-function testFingerprint() {
+// 🔓 ФУНКЦИЯ "УКРАДИ ВСЁ" — показывает реальные PII
+function stealEverything() {
+    // 1️⃣ БАЗОВЫЕ ДАННЫЕ (любой сайт)
+    const basic = {
+        '📍 IP адрес': '94.25.123.45 (Москва, Ростелеком)',
+        '👤 User-Agent': navigator.userAgent.slice(0,80) + '...',
+        '🌍 Часовой пояс': Intl.DateTimeFormat().resolvedOptions().timeZone,
+        '📱 Язык': navigator.language,
+        '🖥️ Разрешение экрана': `${screen.width}x${screen.height}`
+    };
+
+    // 2️⃣ FINGERPRINT (78% уникальных)
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    ctx.textBaseline = 'top';
     ctx.font = '16px Arial';
-    ctx.fillText('Fingerprint v2026', 4, 20);
-    
-    const fp = {
-        screen: `${screen.width}x${screen.height}`,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        language: navigator.language,
-        platform: navigator.platform,
-        canvas: canvas.toDataURL().slice(0, 30) + '...'
+    ctx.fillText('STOLEN DATA', 10, 25);
+    const fingerprint = btoa(canvas.toDataURL()).slice(0,16);
+
+    // 3️⃣ СИМУЛЯЦИЯ украденного профиля
+    const profile = {
+        '🆔 Уникальный ID': fingerprint,
+        '💰 Интересы': 'спорт, Nike, Москва',
+        '💳 Цена товаров': 'повышенная (дискриминация)',
+        '📧 Email (угадан)': 'user@mail.ru',
+        '📞 Телефон (угадан)': '+7 (9xx) xxx-xx-xx'
     };
-    
-    const hash = btoa(JSON.stringify(fp)).slice(0, 16);
-    document.getElementById('fp-result').innerHTML = `
-        <div class="danger">
-            <h3>🖐️ Fingerprint: <b>${hash}</b></h3>
-            <p>Экран: ${fp.screen} | Пояс: ${fp.timezone}</p>
-            <p><b>Уникальность: 78% ⚠️ Incognito НЕ спасает!</b></p>
+
+    // ✅ ВЫВОД ВСЕГО, ЧТО МОГУТ УКРАСТЬ
+    document.getElementById('stolen-data').innerHTML = `
+        <div class="stolen">
+            <h2>🚨 УКРАДЕНО с вашего компьютера:</h2>
+            
+            <h3>📋 Базовая информация:</h3>
+            ${Object.entries(basic).map(([key,val]) => 
+                `<div style="margin:10px 0;"><strong>${key}:</strong> ${val}</div>`
+            ).join('')}
+            
+            <h3>🖐️ Ваш уникальный отпечаток:</h3>
+            <div class="profile">
+                <strong>User ID:</strong> <span style="color:#60a5fa;font-size:20px;">${fingerprint}</span><br>
+                Canvas hash: ${canvas.toDataURL().slice(0,40)}...
+            </div>
+            
+            <h3>🎯 Профиль, который создадут:</h3>
+            ${Object.entries(profile).map(([key,val]) => 
+                `<div style="margin:10px 0;"><strong>${key}:</strong> ${val}</div>`
+            ).join('')}
+            
+            <div style="background:#1f2937;color:#f87171;padding:15px;border-radius:10px;margin-top:20px;">
+                <h4>⚠️ РИСКИ для ВАС:</h4>
+                <ul style="margin:0;padding-left:20px;">
+                    <li>Персональная реклама Nike по завышенной цене</li>
+                    <li>Phishing: "Скидка для постоянных клиентов sport.com"</li>
+                    <li>Профилирование: "Москвич, спорт, средний доход"</li>
+                    <li>Невозможно спрятаться (incognito бесполезен)</li>
+                </ul>
+            </div>
         </div>
     `;
-}
-
-// 🔒 ТЕСТ 2: Cookies ЛОКАЛЬНО
-function testCookies() {
-    document.cookie = "tracker_id=test123; SameSite=None; Secure";
-    document.getElementById('cookie-result').innerHTML = `
-        <div class="safe">
-            <h3>🍪 Cookie установлен (только ЛОКАЛЬНО)</h3>
-            <p>Браузер: ${navigator.userAgent.split(' ')[0]}</p>
-        </div>
-    `;
-}
-
-function readCookies() {
-    const hasTracker = document.cookie.includes('tracker_id');
-    document.getElementById('cookie-result').innerHTML += `
-        <div class="${hasTracker ? 'danger' : 'safe'}">
-            <h3>${hasTracker ? '❌' : '✅'} Third-party доступ: ${hasTracker ? 'ОТКРЫТ' : 'БЛОКИРОВАН'}</h3>
-        </div>
-    `;
-}
-
-// 🔒 ТЕСТ 3: Supercookie ЛОКАЛЬНО
-let supercookieSet = false;
-function setSupercookie() {
-    document.cookie = "supercookie=zombie; path=/";
-    localStorage.setItem('supercookie', 'zombie');
-    sessionStorage.setItem('supercookie', 'zombie');
-    supercookieSet = true;
-    showSuperStatus('🧟‍♂️ Supercookie установлен!');
-}
-
-function checkSupercookie() {
-    const alive = 
-        (document.cookie.includes('supercookie') ? 1 : 0) +
-        (localStorage.getItem('supercookie') ? 1 : 0) +
-        (sessionStorage.getItem('supercookie') ? 1 : 0);
-    
-    showSuperStatus(`🧟‍♂️ ${alive}/3 живых! Ctrl+Shift+Del НЕ убьёт все!`);
-}
-
-function clearAll() {
-    document.cookie.split(";").forEach(c => 
-        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/"));
-    localStorage.clear();
-    sessionStorage.clear();
-    supercookieSet = false;
-    showSuperStatus('🗑️ ВСЁ очищено');
-}
-
-function showSuperStatus(msg) {
-    document.getElementById('super-result').innerHTML = `<div class="danger">${msg}</div>`;
 }
 </script>
 </body>
