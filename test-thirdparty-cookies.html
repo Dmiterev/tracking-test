@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🍪 Third-party Cookies тест</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial; max-width: 700px; margin: 50px auto; padding: 20px; }
+        .danger { background: #fee2e2; border-left: 5px solid #dc2626; padding: 15px; }
+        .safe { background: #ecfdf5; border-left: 5px solid #16a34a; padding: 15px; }
+        iframe { border: 2px solid #007bff; border-radius: 8px; width: 100%; height: 100px; }
+    </style>
+</head>
+<body>
+    <h1>🍪 Third-party Cookies — Главная угроза #1</h1>
+    
+    <div class="danger">
+        <h3>🔴 ОПАСНО: news.com → doubleclick.net → sport.com</h3>
+        <p>Один трекер знает всю вашу историю посещений!</p>
+    </div>
+
+    <h3>Тест:</h3>
+    <iframe id="tracker" src="tracker.html"></iframe>
+    <button onclick="checkCookies()">Проверить cookies</button>
+    <div id="results">Кликните для теста</div>
+
+    <script>
+    function checkCookies() {
+        const iframe = document.getElementById('tracker');
+        const results = document.getElementById('results');
+        
+        // Проверяем статус third-party cookies
+        if (document.cookie.includes('tracker_id')) {
+            results.innerHTML = `
+                <div class="danger">
+                    <h3>❌ Third-party COOKIES РАБОТАЮТ!</h3>
+                    <p>${document.cookie}</p>
+                    <p><b>Браузер уязвим!</b> (Yandex/Opera)</p>
+                </div>
+            `;
+        } else {
+            results.innerHTML = `
+                <div class="safe">
+                    <h3>✅ Third-party cookies БЛОКИРУЮТСЯ</h3>
+                    <p><b>Браузер защищён!</b> (Chrome/Firefox 2024+)</p>
+                </div>
+            `;
+        }
+        
+        results.innerHTML += `
+            <p><small>Тест: Chrome/Firefox блокируют, Yandex/Opera пропускают</small></p>
+        `;
+    }
+    </script>
+</body>
+</html>
