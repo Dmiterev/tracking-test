@@ -8,33 +8,36 @@
         .test { background: #f0f8ff; padding: 20px; margin: 20px 0; border-radius: 10px; }
         a { background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
         a:hover { background: #0056b3; }
+        .coming-soon { background: #f3f4f6; color: #6b7280; border: 2px dashed #d1d5db; }
     </style>
 </head>
 <body>
     <h1>🕵️‍♂️ Лаборатория трекинга — НИРС ИБ</h1>
     <p>Тестируйте угрозы конфиденциальности в разных браузерах:</p>
     
+    <!-- ✅ ТЕСТ 1 -->
     <div class="test">
         <h2>📍 <a href="test-ip-referrer.html">IP + Referrer</a></h2>
         <p>Базовые данные, которые видит любой сайт</p>
     </div>
     
-    <div class="test">
-        <h2>🍪 <a href="test-thirdparty-cookies.html">Third-party Cookies</a></h2>
+    <!-- ⏳ Ждём tracker.html -->
+    <div class="test coming-soon">
+        <h2>🍪 <a href="test-thirdparty-cookies.html">Third-party Cookies</a> ⏳</h2>
         <p>Главная угроза #1 — кросс-сайтовый профиль</p>
     </div>
     
-    <div class="test">
-        <h2>🖐️ <a href="test-fingerprint.html">Fingerprinting</h2>
+    <div class="test coming-soon">
+        <h2>🖐️ <a href="test-fingerprint.html">Fingerprinting</a> ⏳</h2>
         <p>78% уникальных отпечатков — incognito не спасает!</p>
     </div>
     
-    <div class="test">
-        <h2>🧟‍♂️ <a href="test-supercookie.html">Supercookies</a></h2>
+    <div class="test coming-soon">
+        <h2>🧟‍♂️ <a href="test-supercookie.html">Supercookies</a> ⏳</h2>
         <p>Живут месяцы после очистки cookies</p>
     </div>
 
     <hr>
-    <p><small>НИРС "Противодействие отслеживанию в веб-приложениях" © 2026</small></p>
+    <p><small>НИРС "Противодействие отслеживанию" © 2026</small></p>
 </body>
 </html>
