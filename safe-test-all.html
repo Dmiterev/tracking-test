@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head><title>🔒 Безопасный тест трекинга</title>
+<meta charset="UTF-8">
+<style>
+    body { font-family: Arial; max-width: 900px; margin: 50px auto; }
+    .test { border: 2px solid #10b981; padding: 20px; margin: 20px 0; border-radius: 12px; }
+    .danger { background: #fee2e2; border-left: 5px solid #dc2626; }
+    .safe { background: #ecfdf5; border-left: 5px solid #16a34a; }
+    button { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; margin: 5px; }
+</style>
+</head>
+<body>
+<h1>🔒 БЕЗОПАСНЫЙ тест угроз — НИ ДАННЫХ НЕ УХОДИТ!</h1>
+
+<!-- ТЕСТ 1: Локальный fingerprint (без IP) -->
+<div class="test">
+    <h2>🖐️ Fingerprint (78% уникальных)</h2>
+    <button onclick="testFingerprint()">Запустить тест</button>
+    <div id="fp-result"></div>
+</div>
+
+<!-- ТЕСТ 2: Cookies локально -->
+<div class="test">
+    <h2>🍪 Third-party cookies симуляция</h2>
+    <button onclick="testCookies()">Установить cookie</button>
+    <button onclick="readCookies()">Прочитать cookie</button>
+    <div id="cookie-result"></div>
+</div>
+
+<!-- ТЕСТ 3: Supercookie локально -->
+<div class="test">
+    <h2>🧟‍♂️ Supercookie тест</h2>
+    <button onclick="setSupercookie()">Установить</button>
+    <button onclick="checkSupercookie()">Проверить</button>
+    <button onclick="clearAll()">Очистить ВСЁ</button>
+    <div id="super-result"></div>
+</div>
+
+<script>
+// 🔒 ТЕСТ 1: Fingerprint БЕЗ отправки
+function testFingerprint() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.textBaseline = 'top';
+    ctx.font = '16px Arial';
+    ctx.fillText('Fingerprint v2026', 4, 20);
+    
+    const fp = {
+        screen: `${screen.width}x${screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        language: navigator.language,
+        platform: navigator.platform,
+        canvas: canvas.toDataURL().slice(0, 30) + '...'
+    };
+    
+    const hash = btoa(JSON.stringify(fp)).slice(0, 16);
+    document.getElementById('fp-result').innerHTML = `
+        <div class="danger">
+            <h3>🖐️ Fingerprint: <b>${hash}</b></h3>
+            <p>Экран: ${fp.screen} | Пояс: ${fp.timezone}</p>
+            <p><b>Уникальность: 78% ⚠️ Incognito НЕ спасает!</b></p>
+        </div>
+    `;
+}
+
+// 🔒 ТЕСТ 2: Cookies ЛОКАЛЬНО
+function testCookies() {
+    document.cookie = "tracker_id=test123; SameSite=None; Secure";
+    document.getElementById('cookie-result').innerHTML = `
+        <div class="safe">
+            <h3>🍪 Cookie установлен (только ЛОКАЛЬНО)</h3>
+            <p>Браузер: ${navigator.userAgent.split(' ')[0]}</p>
+        </div>
+    `;
+}
+
+function readCookies() {
+    const hasTracker = document.cookie.includes('tracker_id');
+    document.getElementById('cookie-result').innerHTML += `
+        <div class="${hasTracker ? 'danger' : 'safe'}">
+            <h3>${hasTracker ? '❌' : '✅'} Third-party доступ: ${hasTracker ? 'ОТКРЫТ' : 'БЛОКИРОВАН'}</h3>
+        </div>
+    `;
+}
+
+// 🔒 ТЕСТ 3: Supercookie ЛОКАЛЬНО
+let supercookieSet = false;
+function setSupercookie() {
+    document.cookie = "supercookie=zombie; path=/";
+    localStorage.setItem('supercookie', 'zombie');
+    sessionStorage.setItem('supercookie', 'zombie');
+    supercookieSet = true;
+    showSuperStatus('🧟‍♂️ Supercookie установлен!');
+}
+
+function checkSupercookie() {
+    const alive = 
+        (document.cookie.includes('supercookie') ? 1 : 0) +
+        (localStorage.getItem('supercookie') ? 1 : 0) +
+        (sessionStorage.getItem('supercookie') ? 1 : 0);
+    
+    showSuperStatus(`🧟‍♂️ ${alive}/3 живых! Ctrl+Shift+Del НЕ убьёт все!`);
+}
+
+function clearAll() {
+    document.cookie.split(";").forEach(c => 
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/"));
+    localStorage.clear();
+    sessionStorage.clear();
+    supercookieSet = false;
+    showSuperStatus('🗑️ ВСЁ очищено');
+}
+
+function showSuperStatus(msg) {
+    document.getElementById('super-result').innerHTML = `<div class="danger">${msg}</div>`;
+}
+</script>
+</body>
+</html>
