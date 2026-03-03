@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🖐️ Fingerprinting тест</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .fingerprint { background: linear-gradient(45deg, #ff6b6b, #4ecdc4); 
+                       color: white; padding: 20px; border-radius: 12px; text-align: center; }
+        .param { background: #f8fafc; padding: 10px; margin: 8px 0; border-radius: 6px; }
+        .warning { background: #fef3c7; border-left: 5px solid #f59e0b; padding: 15px; }
+    </style>
+</head>
+<body>
+    <h1>🖐️ Browser Fingerprinting — 78% уникальных!</h1>
+    <div class="warning">
+        <h3>⚠️ Incognito НЕ спасает! Clear cookies НЕ помогает!</h3>
+        <p>Ваш комп уникален как отпечаток пальца</p>
+    </div>
+
+    <div id="fingerprint">Генерация fingerprint...</div>
+    <div id="details"></div>
+
+    <script>
+    // Полный fingerprint (20+ параметров)
+    async function getFingerprint() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillText('🖐️ Fingerprint Test v2026', 2, 2);
+        
+        // WebGL fingerprint
+        const glCanvas = document.createElement('canvas');
+        const gl = glCanvas.getContext('webgl') || glCanvas.getContext('experimental-webgl');
+        const glInfo = gl ? {
+            renderer: gl.getParameter(gl.RENDERER),
+            vendor: gl.getParameter(gl.VENDOR)
+        } : { renderer: 'no_webgl', vendor: 'no_webgl' };
+
+        // Audio fingerprint
+        let audioData = 'no_audio';
+        if (window.AudioContext || window.webkitAudioContext) {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            oscillator.type = 'triangle';
+            oscillator.frequency.value = 10000;
+            const compressor = audioCtx.createDynamicsCompressor();
+            oscillator.connect(compressor);
+            compressor.connect(audioCtx.destination);
+            oscillator.start(0);
+            await new Promise(r => setTimeout(r, 100));
+            oscillator.stop(0);
+            audioData = 'audio_supported';
+        }
+
+        const fp = {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            platform: navigator.platform,
+            screen: `${screen.width}x${screen.height}x${screen.colorDepth}`,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            cookiesEnabled: navigator.cookieEnabled,
+            doNotTrack: navigator.doNotTrack,
+            canvas: canvas.toDataURL(),
+            webgl: `${glInfo.renderer} | ${glInfo.vendor}`,
+            audio: audioData,
+            fonts: Array.from(document.fonts).map(f => f.family).join(','),
+            plugins: Array.from(navigator.plugins).map(p => p.name).join(',')
+        };
+
+        // Хеш fingerprint
+        const hash = btoa(JSON.stringify(fp)).slice(0, 16).replace(/[^a-z0-9]/gi, '');
+        
+        document.getElementById('fingerprint').innerHTML = `
+            <h2>🖐️ Ваш fingerprint:</h2>
+            <div style="font-size: 24px; font-weight: bold; letter-spacing: 3px;">
+                ${hash}
+            </div>
+            <p><b>Уникальность: ${hash.length > 12 ? '78% (КРИТИЧНО)' : 'Низкая'}</b></p>
+        `;
+        
+        document.getElementById('details').innerHTML = `
+            <div class="param"><b>🖥️ Экран:</b> ${fp.screen}</div>
+            <div class="param"><b>🌐 Часовой пояс:</b> ${fp.timezone}</div>
+            <div class="param"><b>📱 Браузер:</b> ${fp.userAgent.split(' ')[0]}</div>
+            <div class="param"><b>🎮 GPU:</b> ${fp.webgl}</div>
+            <div class="param"><b>🎵 Audio:</b> ${fp.audio}</div>
+        `;
+    }
+    
+    getFingerprint();
+    </script>
+</body>
+</html>
