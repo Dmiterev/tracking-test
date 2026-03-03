@@ -4,40 +4,123 @@
     <title>🕵️ Тесты трекинга — НИРС ИБ</title>
     <meta charset="UTF-8">
     <style>
-        body { font-family: Arial; max-width: 800px; margin: 50px auto; }
-        .test { background: #f0f8ff; padding: 20px; margin: 20px 0; border-radius: 10px; }
-        a { background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
-        a:hover { background: #0056b3; }
-        .coming-soon { background: #f3f4f6; color: #6b7280; border: 2px dashed #d1d5db; }
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 900px; 
+            margin: 50px auto; 
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        .test { 
+            background: #f8fafc; 
+            padding: 25px; 
+            margin: 20px 0; 
+            border-radius: 12px; 
+            border-left: 5px solid #3b82f6;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .test:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        .test.safe { border-left-color: #10b981; background: #f0fdf4; }
+        .test.danger { border-left-color: #ef4444; background: #fef2f2; }
+        a { 
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8); 
+            color: white; 
+            padding: 15px 30px; 
+            text-decoration: none; 
+            border-radius: 10px; 
+            font-weight: bold;
+            font-size: 16px;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        a:hover { 
+            background: linear-gradient(45deg, #1d4ed8, #1e3a8a);
+            transform: scale(1.05);
+        }
+        .coming-soon { 
+            background: #f3f4f6; 
+            border-left-color: #9ca3af; 
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        a.coming-soon { background: #9ca3af; }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1>🕵️‍♂️ Лаборатория трекинга — НИРС ИБ</h1>
-    <p>Тестируйте угрозы конфиденциальности в разных браузерах:</p>
-    
-    <!-- ✅ ТЕСТ 1 -->
-    <div class="test">
-        <h2>📍 <a href="test-ip-referrer.html">IP + Referrer</a></h2>
-        <p>Базовые данные, которые видит любой сайт</p>
-    </div>
-    
-    <!-- ⏳ Ждём tracker.html -->
-    <div class="test coming-soon">
-        <h2>🍪 <a href="test-thirdparty-cookies.html">Third-party Cookies</a> ⏳</h2>
-        <p>Главная угроза #1 — кросс-сайтовый профиль</p>
-    </div>
-    
-    <div class="test coming-soon">
-        <h2>🖐️ <a href="test-fingerprint.html">Fingerprinting</a> ⏳</h2>
-        <p>78% уникальных отпечатков — incognito не спасает!</p>
-    </div>
-    
-    <div class="test coming-soon">
-        <h2>🧟‍♂️ <a href="test-supercookie.html">Supercookies</a> ⏳</h2>
-        <p>Живут месяцы после очистки cookies</p>
+    <div class="header">
+        <h1>🕵️‍♂️ Лаборатория трекинга — НИРС ИБ</h1>
+        <p><strong>Противодействие отслеживанию в веб-приложениях</strong></p>
+        <p>Тестирование угроз конфиденциальности • 2026</p>
     </div>
 
-    <hr>
-    <p><small>НИРС "Противодействие отслеживанию" © 2026</small></p>
+    <!-- БАЗОВЫЕ ТЕСТЫ -->
+    <h2>📋 Базовые угрозы (видит любой сайт)</h2>
+    
+    <div class="test">
+        <h3>📍 <a href="test-ip-referrer.html">IP + Referrer</a></h3>
+        <p>Базовые данные: IP адрес, откуда перешли, User-Agent</p>
+        <small>Опасность: Низкая ⭐ (меняется при смене WiFi)</small>
+    </div>
+
+    <div class="test">
+        <h3>🍪 <a href="test-thirdparty-cookies.html">Third-party Cookies</a></h3>
+        <p>Кросс-сайтовая история (92% топ-сайтов)</p>
+        <small>Опасность: Высокая ⭐⭐⭐⭐⭐ (Chrome/Firefox блокируют)</small>
+    </div>
+
+    <!-- ПРОДВИНУТЫЕ ТЕСТЫ -->
+    <h2>🔥 Продвинутые угрозы (обходят защиты)</h2>
+    
+    <div class="test danger">
+        <h3>🖐️ <a href="test-fingerprint.html">Browser Fingerprinting</a></h3>
+        <p>78% уникальных отпечатков — incognito НЕ спасает!</p>
+        <small>Опасность: Критическая ⭐⭐⭐⭐⭐⭐ (Yandex/Opera уязвимы)</small>
+    </div>
+
+    <div class="test danger">
+        <h3>🧟‍♂️ <a href="test-supercookie.html">Supercookies</a></h3>
+        <p>7 хранилищ данных — живут месяцы после очистки!</p>
+        <small>Опасность: Максимальная ⭐⭐⭐⭐⭐⭐⭐</small>
+    </div>
+
+    <!-- БЕЗОПАСНЫЙ ТЕСТ -->
+    <h2>🛡️ 100% Безопасный тест (НИ ДАННЫХ НЕ УХОДИТ)</h2>
+    
+    <div class="test safe">
+        <h3>🔒 <a href="safe-test-all.html">Полный безопасный тест</a></h3>
+        <p>Всё локально — ни одна информация не покинет компьютер</p>
+        <small>Идеально для НИРС демонстрации</small>
+    </div>
+
+    <!-- МЕТОДИКА ТЕСТИРОВАНИЯ -->
+    <div class="footer">
+        <h3>📋 Методика тестирования:</h3>
+        <p>
+            1️⃣ Откройте каждый тест в <strong>Chrome / Firefox / Yandex</strong><br>
+            2️⃣ Сделайте <strong>скриншоты результатов</strong><br>
+            3️⃣ Сравните защиты браузеров<br>
+            4️⃣ <strong>safe-test-all.html</strong> — для параноиков (0% риск)
+        </p>
+        <p><strong>НИРС "Противодействие отслеживанию" © 2026</strong></p>
+    </div>
 </body>
 </html>
