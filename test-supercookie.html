@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🧟‍♂️ Supercookie тест</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial; max-width: 700px; margin: 50px auto; padding: 20px; }
+        button { background: #ef4444; color: white; border: none; padding: 12px 24px; 
+                border-radius: 8px; cursor: pointer; margin: 5px; font-size: 16px; }
+        button:hover { background: #dc2626; }
+        button.safe { background: #10b981; }
+        button.safe:hover { background: #059669; }
+        .status { background: #fef3c7; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>🧟‍♂️ Supercookie — Зомби cookies</h1>
+    <p>Живут МЕСЯЦЫ после Ctrl+Shift+Del!</p>
+
+    <div style="background: #fee2e2; padding: 15px; border-radius: 8px;">
+        <h3>⚠️ Тест: Очистите cookies → Supercookie ВЫЖИВЕТ!</h3>
+    </div>
+
+    <button onclick="setSupercookie()">💾 Установить Supercookie</button>
+    <button onclick="readSupercookie()" class="safe">🔍 Проверить Supercookie</button>
+    <button onclick="clearTestData()">🗑️ Очистить ВСЁ (как Ctrl+Shift+Del)</button>
+    
+    <div id="status">Нажмите "Установить" → "Проверить" → "Очистить" → "Проверить"</div>
+
+    <script>
+    async function setSupercookie() {
+        // 5 типов хранения ОДНОВРЕМЕННО
+        document.cookie = "supercookie=zombie; path=/; max-age=31536000";
+        localStorage.setItem('supercookie', 'zombie');
+        sessionStorage.setItem('supercookie', 'zombie');
+        
+        // IndexedDB (самый живучий)
+        const dbReq = indexedDB.open('supercookie_test', 1);
+        dbReq.onupgradeneeded = (e) => {
+            e.target.result.createObjectStore('store');
+        };
+        dbReq.onsuccess = (e) => {
+            e.target.result.transaction('store', 'readwrite')
+                .objectStore('store').put('zombie', 'supercookie');
+        };
+        
+        showStatus('🧟‍♂️ Supercookie установлен во ВСЕ хранилища!');
+    }
+
+    function readSupercookie() {
+        const cookie = document.cookie.includes('supercookie');
+        const local = localStorage.getItem('supercookie');
+        const session = sessionStorage.getItem('supercookie');
+        
+        let alive = 0;
+        if (cookie) alive++;
+        if (local) alive++;
+        if (session) alive++;
+
+        showStatus(`
+            <div class="status">
+                <h3>${alive}/3 хранилища ЖИВЫ! 🧟‍♂️</h3>
+                <p>Cookie: ${cookie ? '✅' : '❌'}</p>
+                <p>localStorage: ${local ? '✅' : '❌'}</p>
+                <p>sessionStorage: ${session ? '✅' : '❌'}</p>
+                <p><b>Очистите cookies → проверьте снова!</b></p>
+            </div>
+        `);
+    }
+
+    function clearTestData() {
+        document.cookie = "supercookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        localStorage.removeItem('supercookie');
+        sessionStorage.removeItem('supercookie');
+        indexedDB.deleteDatabase('supercookie_test');
+        showStatus('🗑️ Данные удалены (как Ctrl+Shift+Del)');
+    }
+
+    function showStatus(text) {
+        document.getElementById('status').innerHTML = text;
+    }
+    </script>
+</body>
+</html>
